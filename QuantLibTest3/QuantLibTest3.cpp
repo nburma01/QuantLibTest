@@ -98,7 +98,7 @@ void PrintResRow(const std::string & method,
 	std::cout << std::endl;
 }
 
-void BlackScholesEx(VanillaOption & euro,
+void BlackScholes(VanillaOption & euro,
 	boost::shared_ptr<BlackScholesMertonProcess> bsmProcess)
 {
 
@@ -196,7 +196,7 @@ void EquityOption(void)
 	// Analytic formulas:
 
 	// Black-Scholes for European
-	BlackScholesEx(europeanOption,
+	BlackScholes(europeanOption,
 		bsmProcess);
 
 }
