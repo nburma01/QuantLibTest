@@ -1,5 +1,27 @@
+/* -*- mode: c++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 // QuantLib Black-Scholes-Merton test
+
+/*!
+Copyright (C) 2005, 2006, 2007 StatPro Italia srl
+Copyright (C) 2008 Bojan Nikolic
+
+Further edited Neil L. Burman - 05-Apr-2015
+
+This file is part of QuantLib, a free-software/open-source library
+for financial quantitative analysts and developers - http://quantlib.org/
+
+QuantLib is free software: you can redistribute it and/or modify it
+under the terms of the QuantLib license.  You should have received a
+copy of the license along with this program; if not, please email
+<quantlib-dev@lists.sf.net>. The license is also available online at
+<http://quantlib.org/license.shtml>.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the license for more details.
+*/
+
 
 // the only header you need to use QuantLib
 #include <ql/quantlib.hpp>
@@ -86,6 +108,12 @@ public:
 };
 
 
+void PressEnter()
+{
+	std::cout << "\nPress <Enter> to continue...";
+	std::cin.ignore();
+}
+
 void PrintResRow(const std::string & method,
 	OutputEl Euro)
 {
@@ -144,15 +172,6 @@ void EquityOption(void)
 	// write column headings
 	PrintResRow("Method",
 		"European");
-
-	/* Test code
-	std::vector<Date> exerciseDates;
-	for (Integer i = 1; i <= 4; i++)
-		exerciseDates.push_back(settlementDate + 3 * i*Months);
-
-	Integer j = 1;
-		std::cout << "exerciseDates[" << j << "]=" << QuantLib::io::long_date(exerciseDates[j]) << "; exerciseDates.size()=" << exerciseDates.size() << std::endl;
-	*/
 
 	boost::shared_ptr<Exercise> europeanExercise(
 		new EuropeanExercise(in.maturity));
@@ -224,8 +243,7 @@ int main(int, char*[]) {
 		std::cout << std::fixed << std::setprecision(5)
 			<< seconds << " s\n" << std::endl;
 
-		std::cout << "\nPress <Enter> to continue...";
-		std::cin.ignore();
+		PressEnter();
 
 		return 0;
 
