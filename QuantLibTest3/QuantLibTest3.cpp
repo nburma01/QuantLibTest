@@ -7,6 +7,8 @@ Copyright (C) 2005, 2006, 2007 StatPro Italia srl
 Copyright (C) 2008 Bojan Nikolic
 
 Further edited Neil L. Burman - 05-Apr-2015
+Removed all code except that for Black-Scholes-Merton.
+Added comments.
 
 This file is part of QuantLib, a free-software/open-source library
 for financial quantitative analysts and developers - http://quantlib.org/
@@ -23,9 +25,10 @@ FOR A PARTICULAR PURPOSE.  See the license for more details.
 */
 
 
-// the only header you need to use QuantLib
+// The only header you need to use QuantLib
 #include <ql/quantlib.hpp>
 
+// Boost and other headers
 #include <boost/timer.hpp>
 #include <boost/variant.hpp>
 #include <iostream>
@@ -33,14 +36,7 @@ FOR A PARTICULAR PURPOSE.  See the license for more details.
 
 using namespace QuantLib;
 
-#if defined(QL_ENABLE_SESSIONS)
-namespace QuantLib {
-
-	Integer sessionId() { return 0; }
-
-}
-#endif
-
+// Input data
 struct OptionInputs {
 	Option::Type type;
 	Real underlying;
@@ -52,7 +48,7 @@ struct OptionInputs {
 	DayCounter dayCounter;
 };
 
-
+// Print the input values
 void PrintInputs(std::ostream & os,
 	const OptionInputs &in)
 {
@@ -108,12 +104,14 @@ public:
 };
 
 
+// Ask the user to press <Enter> to continue program flow
 void PressEnter()
 {
 	std::cout << "\nPress <Enter> to continue...";
 	std::cin.ignore();
 }
 
+// Print a row of output data
 void PrintResRow(const std::string & method,
 	OutputEl Euro)
 {
@@ -126,6 +124,7 @@ void PrintResRow(const std::string & method,
 	std::cout << std::endl;
 }
 
+// Set up the pricing engine
 void BlackScholes(VanillaOption & euro,
 	boost::shared_ptr<BlackScholesMertonProcess> bsmProcess)
 {
@@ -138,23 +137,22 @@ void BlackScholes(VanillaOption & euro,
 		euro.NPV());
 }
 
-
+// Set up the option parameters
 void EquityOption(void)
 {
 
 	std::cout << std::endl;
 
-	// set up dates
+	// Set up dates
 	Calendar calendar = TARGET();
 	Date todaysDate(15, May, 1998);
 	Date settlementDate(17, May, 1998);
 	Settings::instance().evaluationDate() = todaysDate;
 
-	// our options
+	// Our options
 	OptionInputs in;
 
-	//in.type = Option::Call;
-
+	// Set up the option parameters
 	in.type = Option::Put;
 	in.underlying = 36;
 	in.strike = 40;
@@ -164,9 +162,11 @@ void EquityOption(void)
 	in.maturity = Date(17, May, 1999);
 	in.dayCounter = Actual365Fixed();
 
+	// Print the options
 	PrintInputs(std::cout, in);
 	std::cout << std::endl;
 
+	// Print "today's date"
 	std::cout << "Today's Date : " << todaysDate << std::endl << std::endl;
 
 	// write column headings
@@ -179,7 +179,7 @@ void EquityOption(void)
 	Handle<Quote> underlyingH(
 		boost::shared_ptr<Quote>(new SimpleQuote(in.underlying)));
 
-	// bootstrap the yield/dividend/vol curves
+	// Bootstrap the yield/dividend/vol curves
 	Handle<YieldTermStructure> flatTermStructure(
 		boost::shared_ptr<YieldTermStructure>(
 		new FlatForward(settlementDate,
@@ -203,13 +203,14 @@ void EquityOption(void)
 		new PlainVanillaPayoff(in.type,
 		in.strike));
 
+	// Set up the Black-Scholes-Merton process
 	boost::shared_ptr<BlackScholesMertonProcess> bsmProcess(
 		new BlackScholesMertonProcess(underlyingH,
 		flatDividendTS,
 		flatTermStructure,
 		flatVolTS));
 
-	// options
+	// Vanilla option - European
 	VanillaOption europeanOption(payoff, europeanExercise);
 
 	// Analytic formulas:
@@ -220,6 +221,7 @@ void EquityOption(void)
 
 }
 
+// Get the option price and print timing information
 int main(int, char*[]) {
 
 	try {
@@ -227,6 +229,7 @@ int main(int, char*[]) {
 		// Start the timer
 		boost::timer timer;
 
+		// Price the option
 		EquityOption();
 
 		// Get the elapsed time
@@ -240,18 +243,25 @@ int main(int, char*[]) {
 			std::cout << hours << " h ";
 		if (hours > 0 || minutes > 0)
 			std::cout << minutes << " m ";
+
+		// Output the elapsed time
 		std::cout << std::fixed << std::setprecision(5)
 			<< seconds << " s\n" << std::endl;
 
+		// Ask the user to continue
 		PressEnter();
 
+		// Exit
 		return 0;
-
 	}
+
+	// Known unknown exceptions
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		return 1;
 	}
+
+	// Unknown unknown exceptions
 	catch (...) {
 		std::cout << "unknown error" << std::endl;
 		return 1;
