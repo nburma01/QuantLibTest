@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Software\QuantLib\QuantLib-1.5;D:\Software\Boost\boost_1_57_0;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Software\QuantLib\QuantLib-1.5\lib;D:\Software\Boost\boost_1_57_0\stage\lib;D:\Software\Boost\boost_1_57_0\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QUANTLIB_HOME);$(BOOST_HOME);$(IncludePath)</IncludePath>
+    <LibraryPath>$(QUANTLIB_HOME)\lib;$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\Software\QuantLib\QuantLib-1.5;D:\Software\Boost\boost_1_57_0;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Software\QuantLib\QuantLib-1.5\lib;D:\Software\Boost\boost_1_57_0\stage\lib;D:\Software\Boost\boost_1_57_0\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(QUANTLIB_HOME);%BOOST_HOME%;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QUANTLIB_HOME)\lib;$(BOOST_HOME)\stage\lib;$(BOOST_HOME)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
